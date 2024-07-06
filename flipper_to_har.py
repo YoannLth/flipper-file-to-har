@@ -109,15 +109,13 @@ def convert_flipper_to_har(flipper_data):
         else:
             encoding = None
 
-        request_data = {
-            "startedDateTime": started_datetime,
-            "time": duration,
-            "request": {
-                "method": request.get("method", ""),
-                "url": request.get("url", ""),
-                "headers": format_headers(request.get("requestHeaders")),
-            },
-            "response": {
+        # Check if the status is "..."
+        if request.get("status") == "...":
+            # If status is "...", set the response object to an empty dictionary
+            response = {}
+        else:
+            # Otherwise, populate the response object as usual
+            response = {
                 "status": request.get("status", 0),
                 "statusText": request.get("reason", ""),
                 "headers": format_headers(request.get("responseHeaders")),
@@ -127,12 +125,25 @@ def convert_flipper_to_har(flipper_data):
                     "text": response_text,
                 },
                 "redirectURL": "",
+            }
+
+            if encoding == "base64":  # adds encoding property if needed
+                response["content"]["encoding"] = encoding
+
+        request_data = {
+            "startedDateTime": started_datetime,
+            "time": duration,
+            "request": {
+                "method": request.get("method", ""),
+                "url": request.get("url", ""),
+                "headers": format_headers(request.get("requestHeaders")),
             },
+            "response": response,  # Use the constructed response object
             "cache": {},
             "timings": {
-                "send": 0, # not known in Flipper files so set to default values
+                "send": 0,  # not known in Flipper files so set to default values
                 "wait": duration,
-                "receive": 0 # not known in Flipper files so set to default values
+                "receive": 0  # not known in Flipper files so set to default values
             }
         }
 
@@ -144,9 +155,6 @@ def convert_flipper_to_har(flipper_data):
                 "mimeType": request_mime_type,
                 "text": request_data_text
             }
-
-        if encoding == "base64": # adds encoding property if needed
-            request_data["response"]["content"]["encoding"] = encoding
 
         har_data["log"]["entries"].append(request_data)
 

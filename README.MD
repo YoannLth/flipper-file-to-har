@@ -45,13 +45,17 @@ Quick Actions provide a convenient way to convert Flipper files to HAR through t
 
 To set up a Quick Action using AppleScript:
 
-1. Open Automator on your Mac.
+1. Copy the file "flipper_to_har.py" and save in "~/scripts/". Otherwise, you could have an "[Errno 1] Operation not permitted" error
 
-2. Create a new Quick Action workflow.
+2. Open Automator on your Mac.
 
-3. Add the "Run AppleScript" action to the workflow.
+3. Create a new Quick Action workflow.
 
-4. Replace the default AppleScript with the following code:
+4. Add the "Run AppleScript" action to the workflow.
+
+5. Change the Workflow configuration by changing "Workflow receives current Automatic (nothing)" with "Workflow receives files or folders"
+
+6. Replace the default AppleScript with the following code:
 
    ```applescript
    on run {input, parameters}
@@ -71,7 +75,7 @@ To set up a Quick Action using AppleScript:
    ````
 Replace /path/to/flipper_to_har.py with the path to the script file.
 
-5. Save the Quick Action workflow with an appropriate name (e.g., "Convert Flipper to HAR").
+7. Save the Quick Action workflow with an appropriate name (e.g., "Convert Flipper to HAR").
 
 #### Use Quick Actions on a file
 To convert a Flipper file to HAR using the Quick Action:
