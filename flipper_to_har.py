@@ -149,7 +149,7 @@ def convert_flipper_to_har(flipper_data):
 
         request_mime_type = get_mime_type(request.get("requestHeaders"))
         request_request_data = request.get("requestData")
-        if request_request_data is not None and request_mime_type is not None:
+        if request_request_data is not None and request_mime_type is not None and request_mime_type != "application/msgpack":
             request_data_text = format_json_text(request_request_data)
             request_data["request"]["postData"] = {
                 "mimeType": request_mime_type,
